@@ -71,7 +71,7 @@
         --tw-contain-size: ;
         --tw-contain-layout: ;
         --tw-contain-paint: ;
-        --tw-contain-style: 
+        --tw-contain-style:     
     ;
       }
 
@@ -126,7 +126,7 @@
         --tw-contain-size: ;
         --tw-contain-layout: ;
         --tw-contain-paint: ;
-        --tw-contain-style: 
+        --tw-contain-style:     
     ;
       }
 
@@ -2207,7 +2207,27 @@
       ></div>
 
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <!-- CONTENEDOR DEL VIDEO DE PRESENTACIÓN -->
+        <div class="w-full mb-12 reveal-item active">
+          <div
+            class="relative w-full rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl bg-slate-900 border border-slate-200/20"
+          >
+            <video
+              id="video-presentacion"
+              src="video-presentacion.mp4"
+              autoplay
+              muted
+              playsinline
+              loop
+              controls
+              class="w-full h-auto block"
+            >
+              Tu navegador no soporta el elemento de video.
+            </video>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mt-8">
           <!-- HERO TEXT CONTENT -->
           <div
             class="lg:col-span-7 space-y-6 text-center lg:text-left reveal-item active"
@@ -3632,6 +3652,27 @@
       document.querySelectorAll(".reveal-item").forEach((item) => {
         revealObserver.observe(item);
       });
+
+      // Video Scroll Observer: reproduce automáticamente sin sonido y se detiene cuando no es visible
+      const presentationVideo = document.getElementById("video-presentacion");
+      if (presentationVideo) {
+        presentationVideo.muted = true; // Asegurar reproducción automática sin sonido en todos los navegadores
+        const videoObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                presentationVideo.play().catch(() => {});
+              } else {
+                presentationVideo.pause();
+              }
+            });
+          },
+          {
+            threshold: 0.1, // Se detiene cuando menos del 10% del video es visible
+          },
+        );
+        videoObserver.observe(presentationVideo);
+      }
     </script>
   </body>
 </html>
